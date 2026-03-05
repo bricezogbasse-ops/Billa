@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniCredit Premium | Международен портал за финансиране</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --red: #e2001a;
+            --green: #25D366; 
+            --dark: #1a1a1a;
+            --grey: #f4f7f9;
+            --white: #ffffff;
+            --overlay: rgba(0, 0, 0, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background: var(--grey); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+
+        .navbar { background: var(--white); padding: 15px 0; border-bottom: 3px solid var(--red); position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--dark); text-decoration: none; cursor: pointer; }
+        .logo span { color: var(--red); }
+
+        .page { min-height: 100vh; display: none; padding-top: 100px; padding-bottom: 50px; background-size: cover; background-position: center; background-attachment: fixed; }
+        .page.active { display: block; animation: fadeIn 0.6s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #page-welcome { background-image: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600'); }
+        #page-eligibility { background-image: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=1600'); }
+        #page-simulateur { background-image: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600'); }
+        #page-dashboard { background-image: linear-gradient(rgba(244,247,249,0.95), rgba(244,247,249,0.95)), url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600'); }
+        #page-form { background-image: linear-gradient(var(--overlay), var(--overlay)), url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600'); }
+
+        .glass-card { background: rgba(255, 255, 255, 0.98); padding: 35px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); max-width: 800px; margin: 0 auto; }
+        .btn { padding: 15px 25px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; text-align: center; width: 100%; display: inline-block; text-decoration: none; }
+        .btn-red { background: var(--red); color: white; }
+        .btn-green { background: var(--green); color: white; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; font-size: 18px; }
+        .btn-red:disabled { background: #ccc; cursor: not-allowed; }
+        .input-field { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+
+        .notification-area { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+        .testimonial-toast { background: white; padding: 12px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-left: 5px solid var(--red); display: flex; align-items: center; gap: 12px; min-width: 320px; transform: translateX(-150%); transition: 0.6s; }
+        .testimonial-toast.show { transform: translateX(0); }
+        .testimonial-toast img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
+
+        #security-scanner { display: none; text-align: center; padding: 25px; border: 2px dashed var(--red); border-radius: 10px; background: #fff5f5; margin-top: 20px; }
+        .scanner-line { width: 100%; height: 2px; background: var(--red); position: relative; animation: scanAnim 2s infinite; }
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 40px; } }
+
+        .db-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .db-card { background: #fff; padding: 20px; border-radius: 8px; border-top: 4px solid var(--red); text-align: center; }
+        #whatsapp-module { display: none; text-align: center; margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a class="logo" onclick="showPage('welcome')">Uni<span>Credit</span> Premium</a>
+            <div style="color: #27ae60; font-weight: bold; font-size: 13px;">🛡️ АКТИВНО БАНКОВО КРИПТИРАНЕ</div>
+        </div>
+    </nav>
+
+    <section id="page-welcome" class="page active">
+        <div class="container">
+            <div class="glass-card" style="text-align: center;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Премиум Финансиране</h1>
+                <p style="font-size: 1.1rem; margin-bottom: 25px;">Получете капитал от <strong>5 000 € до 1 000 000 €</strong> с индивидуално разглеждане на вашето досие.</p>
+                <button class="btn btn-red" onclick="showPage('eligibility')">Провери допустимост</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-eligibility" class="page">
+        <div class="container">
+            <div class="glass-card">
+                <h2>Условия за допустимост</h2>
+                <div style="margin-top: 25px;">
+                    <label style="display: flex; gap: 10px; margin-bottom: 15px; cursor: pointer;"><input type="checkbox" class="cond-check"> <span>Аз съм данъчно пребиваващо лице в Европа.</span></label>
+                    <label style="display: flex; gap: 10px; margin-bottom: 15px; cursor: pointer;"><input type="checkbox" class="cond-check"> <span>Приемам таксата от 300 € за разглеждане и откриване на досието.</span></label>
+                    <label style="display: flex; gap: 10px; margin-bottom: 15px; cursor: pointer;"><input type="checkbox" class="cond-check"> <span>Удостоверявам, че нямам сериозни банкови нарушения.</span></label>
+                </div>
+                <button id="btn-next" class="btn btn-red" style="margin-top: 20px;" disabled onclick="showPage('simulateur')">Към симулатора</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-simulateur" class="page">
+        <div class="container">
+            <div class="glass-card">
+                <h2 style="text-align: center;">Конфигурация на финансирането</h2>
+                <div style="margin: 30px 0;">
+                    <label>Желана сума: <b id="amt-txt">500 000</b> €</label>
+                    <input type="range" id="amt-range" min="5000" max="1000000" step="5000" value="500000" oninput="runCalculations()" style="width: 100%;">
+                </div>
+                <div style="margin: 30px 0;">
+                    <label>Срок: <b id="dur-txt">120</b> месеца</label>
+                    <input type="range" id="dur-range" min="12" max="300" step="12" value="120" oninput="runCalculations()" style="width: 100%;">
+                </div>
+                <div style="background: #fdf2f2; padding: 25px; text-align: center; border-radius: 10px; border: 1px solid var(--red);">
+                    <p>Прогнозна месечна вноска (ГПР 2.00%):</p>
+                    <div style="font-size: 45px; font-weight: bold; color: var(--red);"><span id="mth-res">--</span> €</div>
+                </div>
+                <button class="btn btn-red" style="margin-top: 25px;" onclick="showPage('dashboard')">Потвърди симулацията</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-dashboard" class="page">
+        <div class="container">
+            <h2 style="margin-bottom: 20px;">Досие № UNIC-2026-X88</h2>
+            <div class="db-grid">
+                <div class="db-card"><b>Статус</b><p style="color: var(--red); font-weight: bold;">ОЧАКВАЩО</p></div>
+                <div class="db-card"><b>Сума</b><p id="db-val">-- €</p></div>
+                <div class="db-card"><b>Такса досие</b><p>300.00 €</p></div>
+            </div>
+            <div class="glass-card" style="max-width: 100%; border-left: 10px solid var(--red);">
+                <h3>Изисква се приоритетно потвърждение</h3>
+                <p>Вашата симулация е записана. За да финализирате процедурите и да получите средствата, трябва да подадете документите си и да заплатите таксата за разглеждане.</p>
+                <button class="btn btn-red" style="width: 250px; margin-top: 20px;" onclick="showPage('form')">Попълни досието</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-form" class="page">
+        <div class="container">
+            <div class="glass-card">
+                <h2 style="text-align: center;">Официално подаване на досието</h2>
+                <form id="loan-form" onsubmit="triggerSecurityScan(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <input type="text" id="user-name" placeholder="Име и фамилия" class="input-field" required>
+                        <input type="email" placeholder="Имейл за връзка" class="input-field" required>
+                    </div>
+                    
+                    <label>Нетен месечен доход (€)</label>
+                    <input type="number" id="income-input" class="input-field" placeholder="Пример: 5000" required oninput="checkSolvability()">
+                    <div id="solvability-msg" style="padding: 10px; border-radius: 5px; font-size: 13px; display: none; margin-top: 5px;"></div>
+
+                    <div style="margin-top: 15px; padding: 15px; border: 1px dashed #ccc; background: #fff;">
+                        <label>Документи (Лична карта, Доходи, банкова сметка)</label>
+                        <input type="file" class="input-field" required>
+                    </div>
+
+                    <div id="security-scanner">
+                        <div class="scanner-line"></div>
+                        <p style="margin-top: 10px; color: var(--red); font-weight: bold;">БАНКОВ СКАНИРАНЕ ЗА СЪОТВЕТСТВИЕ...</p>
+                    </div>
+
+                    <div id="whatsapp-module">
+                        <h3 style="color: var(--dark);">Финализиране на трансфера на средства</h3>
+                        <p style="font-size: 15px; margin: 15px 0;">
+                            За да финализирате вашия заем от <strong><span id="final-amt">--</span> €</strong>, трябва да заплатите таксата за досие от <strong>300 €</strong>.
+                        </p>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 1px solid #25D366; margin-bottom: 15px;">
+                            <p style="font-size: 14px;">Свържете се с нашия отдел за съдействие чрез <strong>WhatsApp</strong>. Консултант ще ви изпрати инструкции за плащане, за да потвърди незабавното изпращане на вашата сума.</p>
+                        </div>
+                        
+                        <a href="https://wa.me/359886646129?text=Здравейте,%20искам%20да%20финализирам%20досието%20си%20UNIC-2026-X88%20и%20да%20платя%20таксата%20от%20300€,%20за%20да%20получа%20заема%20си." 
+                           target="_blank" class="btn btn-green">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="22" alt="WhatsApp">
+                            Съдействие чрез WhatsApp (+359 88 664 6129)
+                        </a>
+                    </div>
+
+                    <button type="submit" id="btn-submit" class="btn btn-red" style="margin-top: 20px;">Изпрати досието</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="notification-area" id="notif-area"></div>
+
+    <script>
+        let monthly = 0;
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        document.querySelectorAll('.cond-check').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const allChecked = Array.from(document.querySelectorAll('.cond-check')).every(i => i.checked);
+                document.getElementById('btn-next').disabled = !allChecked;
+            });
+        });
+
+        function runCalculations() {
+            const P = document.getElementById('amt-range').value;
+            const n = document.getElementById('dur-range').value;
+            monthly = (P * (0.02/12)) / (1 - Math.pow(1 + (0.02/12), -n));
+            document.getElementById('amt-txt').textContent = parseInt(P).toLocaleString();
+            document.getElementById('dur-txt').textContent = n;
+            document.getElementById('mth-res').textContent = monthly.toFixed(2).toLocaleString();
+            document.getElementById('db-val').textContent = parseInt(P).toLocaleString() + " €";
+            document.getElementById('final-amt').textContent = parseInt(P).toLocaleString();
+        }
+
+        function checkSolvability() {
+            const inc = document.getElementById('income-input').value;
+            const msg = document.getElementById('solvability-msg');
+            const btn = document.getElementById('btn-submit');
+            msg.style.display = 'block';
+            if (inc > 0 && monthly > (inc * 0.33)) {
+                msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+                msg.innerHTML = "⚠️ Внимание: Вноската е твърде висока спрямо доходите ви.";
+                btn.disabled = true;
+            } else {
+                msg.style.background = '#d4edda'; msg.style.color = '#155724';
+                msg.innerHTML = "✅ Финансовият профил е потвърден за този проект.";
+                btn.disabled = false;
+            }
+        }
+
+        function triggerSecurityScan(e) {
+            e.preventDefault();
+            document.getElementById('btn-submit').style.display = 'none';
+            document.getElementById('security-scanner').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('security-scanner').style.display = 'none';
+                document.getElementById('whatsapp-module').style.display = 'block';
+            }, 3500);
+        }
+
+        const feed = [
+            { name: "Иван Т.", text: "900k€ получени за разширяване на бизнеса. WhatsApp поддръжката е отлична!", img: "https://i.pravatar.cc/150?u=44" },
+            { name: "Мария С.", text: "Заем от 15 000€ одобрен за 48 часа след плащане на таксата. Много сериозно отношение.", img: "https://i.pravatar.cc/150?u=32" }
+        ];
+        let fIdx = 0;
+        function popNotif() {
+            const area = document.getElementById('notif-area');
+            const sound = document.getElementById('notif-sound');
+            const data = feed[fIdx];
+            const t = document.createElement('div');
+            t.className = 'testimonial-toast';
+            t.innerHTML = `<img src="${data.img}"><div><b>${data.name}</b><p>"${data.text}"</p></div>`;
+            area.appendChild(t);
+            sound.play().catch(() => {});
+            setTimeout(() => t.classList.add('show'), 100);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 600); }, 5500);
+            fIdx = (fIdx + 1) % feed.length;
+        }
+
+        setInterval(popNotif, 12000);
+        runCalculations();
+    </script>
+</body>
+  </html>
